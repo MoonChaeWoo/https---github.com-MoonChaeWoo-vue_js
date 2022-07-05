@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="app">
+      <child-component></child-component>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+      // 이벤 버스 형식
+      // 이벤트 버스를 구현하려면 애플리케이션 로직을 담는 인스턴스와 별개로 새로운 인스턴스를 1개 더 생성한다.
+      // 새 인스턴스를 이용하여 이벤트를 보내고 받는다.
+      // 보내는 컴포넌트에서는 .$emit()을 받는 컴포넌트에서는 .$on()을 구현합니다.
+
+      // 이벤트 버스를 위한 추가 인스턴스 1개 생성
+      // ex) var eventBus = new Vue();
+
+      // 이벤트를 보내는 컴포넌트
+      // ex) methods : {
+      //   <메소드명> : function(){
+      //    eventBus.$emit('이벤트명', 데이터);
+      //  }
+      // }
+
+      // 이벤트를 받는 컴포넌트
+      // ex) methods : {
+      //    created : function(){
+      //    eventBus.$on('이벤트명', function(데이터){
+      //      ...
+      //   });
+      //  }
+      // }
+
+      // 이벤트 버스를 위한 추가 인스턴스 1개 생성
+      var eventBus = new Vue();
+
+      // 이벤트를 보내는 컴포넌트
+      Vue.component('child-component',{
+        template : '<div>하위 컴포넌트 영역 <button v-on:click="showLog">show</button></div>',
+        methods : {
+          showLog : function() {
+              eventBus.$emit('triggerEventBus', 100);
+          }
+        }
+      });
+
+      // 이벤트를 받는 컴포넌트
+      var app = new Vue({
+        el : '#app',
+        created : function(){
+          eventBus.$on('triggerEventBus', function(value){
+            console.log('이벤트를 전달 받음. 전달받은 값 : ', value);
+          });
+        }
+      });
+
+    </script>
+  </body>
+</html>

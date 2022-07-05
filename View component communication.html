@@ -54,6 +54,10 @@
       // props 속성                                                                     });
       // props는 상위 컴포넌트에서 하위 컴포넌트로 데이터를 전달할 때 사용하는 속성이다.
       // props 속성을 사용하려면 먼저 하위 컴포넌트의 속성에 정의하여야 한다.
+      // 그런 다음 상위컴포넌트의 HTML 코드에 등록된 child-component 컴포넌트 태그에 v-child 속성을 추가한다.
+      // ex) <child-component v-bind:props 속성이름="상위 컴포넌트의 data 속성"></child-component>
+      // v-bind 속성의 왼쪽 값으로 하위 컴포넌트에서 정의한 props 속성을 넣고, 오른쪽 값으로 하위 컴포넌트에 전달할 상위 컴포넌트의
+      // data 속성을 지정한다.
       new Vue({
         el : '#app',
         components : {

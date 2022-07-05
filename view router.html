@@ -54,7 +54,7 @@
       // 뷰 라우터 정의
       // router 변수에는 뷰 라우터 하나를 생성하고, routes를 삽입해 URL에 따라 화면이 전환될 수 있게 정의힌다.
       var router = new VueRouter({
-        mode: 'history',
+        // mode : 'history', URL의 #해시 값을 없애는 옵션이다.
         routes, // 'routes' : routes의 줄인거 이기 때문에 다른 이름을 사용하려면 풀어서 재정의를 하면된다.
         // ex) 'routes' : test
       });

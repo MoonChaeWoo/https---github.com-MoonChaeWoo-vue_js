@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <div id="app">
+      <my-component1></my-component1>
+      <my-component2></my-component2>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+      // 일발적으로 한 화면을 1개의 뷰로 간주하였으므로 해당 화면 영역 어디에 있던 같은 뷰 이기에
+      // 통신이 가능할 수 있었다.
+      // 하지만 뷰의 경우 컴포넌트로 화면을 구성하므로 같은 웹 펭지라도 데이터를 공유할 수 없다.
+      // 이유는 컴포넌트 간 자체적으로 고유한 유효범위를 갖기 때문이다.
+      // 이는 뷰 프레임 워크 내부적으로 정의된 특징이다.
+      // 따라서 각 컴포넌트의 유효범위가 독립적이기 때문에 다른 컴포넌트의 값을 직접적으로 참조할 수 없다.
+
+      // 첫 번째 컴포넌트 내용
+      var cmp1 = {
+        template : '<div>첫 번째 지역 컴포넌트 : {{ cmp1Data }}</div>',
+        data : function(){
+          return{
+            cmp1Data : 100
+          }
+        }
+      };
+
+      // 두 번째 컴포넌트 내용
+      var cmp2 = {
+        template : '<div>두 번째 지역 컴포넌트 : {{ cmp1Data }}</div>',
+        data : function(){
+          return{
+            cmp2Data : cmp1.data.cmp1Data
+          }
+        }
+      };
+
+      // 컴포넌트간의 통신중 가장 기본적인 방법은 상위-하위 컴포넌트 간의 데이터 전달 방법이다.
+      // 즉 부모 자식간의 관계에서 이뤄지는 통신을 말한다.
+      //                   (상위 컴포넌트)
+      //                ↗               ↘
+      //    (이벤트 발생)                   (props 전달)
+      //                ↖               ↙
+      //                   (하위 컴포넌트)
+
+      // 상위에서 하위로는 props라는 특별한 속성을 전달한다.                               **하위 컴포넌트의 props 정의 방식**
+      // 하위에서 상위로는 기본적으로 이벤트만 전달할 수 있다.                              Vue.component('child-component',{
+      // 상위에서 하위컴포넌트로 데이터 전달하기                                              props : ['props 속성이름'],
+      // props 속성                                                                     });
+      // props는 상위 컴포넌트에서 하위 컴포넌트로 데이터를 전달할 때 사용하는 속성이다.
+      // props 속성을 사용하려면 먼저 하위 컴포넌트의 속성에 정의하여야 한다.
+      // 그런 다음 상위컴포넌트의 HTML 코드에 등록된 child-component 컴포넌트 태그에 v-child 속성을 추가한다.
+      // ex) <child-component v-bind:props 속성이름="상위 컴포넌트의 data 속성"></child-component>
+      // v-bind 속성의 왼쪽 값으로 하위 컴포넌트에서 정의한 props 속성을 넣고, 오른쪽 값으로 하위 컴포넌트에 전달할 상위 컴포넌트의
+      // data 속성을 지정한다.
+      new Vue({
+        el : '#app',
+        components : {
+          'my-component1' : cmp1,
+          'my-component2' : cmp2
+        }
+      });
+    </script>
+  </body>
+</html>

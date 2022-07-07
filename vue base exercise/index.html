@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="app"> <!-- id가 app인 부분이 뷰의 인스턴스의 유효범위라고 한다. -->
+      {{ message }}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+      new Vue({  // 인스턴스
+        // new Vue 생성자는 뷰 라이브러리를 로딩하고 나면 접근할 수 있다. 생성자를 사용하는 이유는 뷰로 개발할 때 필요한 기능들을 생성자에
+        // 미리 정의해 놓고 사용자가 그 기능을 재정의하여 편리하게 사용하도록 하기 위해서 이다.
+        // 뷰 인스턴스 옵션 속성은 인스턴스를 생성할 때 재정의할 data, el, template 등의 속성을 의미한다.
+        // 예를 들어 Hello Vue.js를 띄워진건 data라는 미리 정의된 속성을 사용하였고 그 안에 사용자가 message라는 새로운 속성을 추가하고
+        // Hello vue.js라는 값을 준 것이다.
+        el : '#app', // el 속성 : 뷰 인스턴스가 그려질 지점을 지정한다. (선택자는 css의 선택자 규칙과 같다.)
+        data : { // data 속  : data속성에 message 값을 정의하여 화면의 {{ message }}에 연결한다.
+          message : 'Hello Vue.js!'
+        },
+        beforeCreate : function(){
+          console.log("beforeCreate")
+        },
+        created : function(){
+          console.log("created")
+        },
+        beforeMount : function(){
+          console.log("beforeMount")
+        },
+        mounted : function(){
+          console.log("mounted")
+          // message가 화면에 보이는 값을 바꾸는 걸 실습
+          this.message = 'Hello Vue update value!'
+        },
+        beforeUpdate : function(){
+          console.log("beforeUpdate")
+        },
+        updated : function(){
+          console.log("updated")
+        },
+        beforeDestroy : function(){
+          console.log("beforeDestroy")
+        },
+        destroyed : function(){
+          console.log("destroyed")
+        }
+      });
+      // template : 화면에 표시할 HTML, CSS 등의 마크업 요소를 정의하는 속성.
+      //            뷰의 데이터 및 기타 속성 들도 함께 화면에 그릴 수 있다.
+
+      // methods : 화면 로직 제어와 관계된 메서드를 정의하는 속성, 마우스 클릭 이벤트 처리와 같이 화면의 전반적인 이벤트와 화면 동작과 관련된
+      //           로직을 추가할 수 있다.
+
+      // created : 뷰 인스턴스가 생성되자마자 실행할 로직을 정의할 수 있는 속성. (인스턴스가 생성되었을 때 호출할 동작을 정의하는 속성)
+      //           인스턴스의 상태에 따라 호출할 수 있는 속성들을 라이프 사이클(life cycle)이라고 한다.
+      //           각 라이프 사이클 속성에서 실행되는 커스텀 로직을 "라이프 사이클 훅(hook)이라고 한다."
+
+      // 라이프 사이클의 속성 (총 8개)
+      // 1.beforeCreate → 2.created → 3.beforeMount → 4.mounted → 5.beforeUpdate → 6.updated → 7.beforeDestroy → 8.destroyed
+
+      // 인스턴스 생성 → (이벤트 및 라이프 사이클 초기화) → beforeCreate → (화면에 반응성 주입) → created → (el, template 속성확인) → (template 속성 내용을 render()로 변환)
+      // → beforeMount → ()$el 생성 후 el 속성 값을 대입) → ()인스턴스를 화면에 부착) ----(점선 구간은 데이터가 변경되는 경우에만 거침) ---> (인스턴스의 데이터 변경)
+      // ----->  beforeUpdate -----> (화면 재 렌더링 및 데이터 갱신) -----> updated ----> ()인스턴스 내용 갱신) → (인스턴스 접근 가능) → beforeDestroy
+      // → (컴포넌트, 인스턴스, 디렉티브 등 모두 해제) → destroyed → 인스턴스 소멸
+
+      // 크게 4가지로 나눈다면 생성 → 부착 → 갱싱 → 소멸로 이루어진다.
+
+      // beforeCreate
+      // - 인스턴스가 생성되고 나서 가장 처음으로 실행되는 라이프 사이클 단계이다.
+      // - 이 단계에서는 data 속성과 methods 속성이 아직 인스턴스에 정의되어 있지 않고, 돔과 같은 화면 요소에도 접근할 수 없다.
+
+      // created
+      // - data 속성과 methods 속성이 정의 되었기 때문에 this.data 또는 this.fetchData()와 같은 로직들을 이용하여 data 속성과 methods 속성에서
+      //   정의된 값에 접근하여 로직을 실행할 수 있다.
+      // - 하지만 아직 인스턴스가 화면 요소에 부착되기 전이기 때문에 template 속성에 정의된 돔 요소로 접근할 수 없다.
+      // - data 속성과 methods 속성에 접근할 수 있는 가장 첫 라이프 사이클 단계이자 컴포넌트가 생성되고 나서 실행되는 단계이기 때문에 서버에 데이터를 요청하여
+      //   받아오는 로직을 수행하기 좋다.
+
+      // beforeMount
+      // -  created 단계 이후 template 속성에 지정한 마크업 속성을 render() 함수로 변환 후 el속성에 지정한 화면 요소(돔)에 인스턴스를 부착하기 전에 호출되는
+      //    단계이다.
+      // - render() 함수가 호출되기 직전에 로직을 추가하기 좋다. (* render()는 자바스크립트에서 화면에 돔을 그리는 함수이다.)
+
+      // mounted
+      // - el 속성에서 지정한 화면에 인스턴스가 부착되고 나면 호출되는 단계이다.
+      // - template 속성에 정의한 화면 요소(돔)에 접근할 수 있어 화면 요소를 제어하는 로직을 수행하기 좋은 단계이다.
+      // - 다만 돔에 인스턴스가 부착되자마자 바로 호출 되기 때문에 하위 컴포넌트나 외부라이브러리에 의해 추가된 화면 요소들이 최종 HTML 코드로 변환되는
+      //   시점과 다를 수 있다.
+      // - *중요* 변환되는 시점이 다를 경우 $nextTick() API를 활용하여 HTML 코드로 최종 파싱(변환)될 때까지 기다린 후 돔 제어 로직을 추가한다. 중요 !!
+
+      // beforeUpdate
+      // - el 속성에서 지정한 화면 요소에 인스턴스가 부착되고 나면 인스턴스에 정의한 속성들이 화면에 치환된다.
+      // - 치환된 값은 뷰의 반응성을 제공하기 위해 $watch속성으로 감시한다. 이를 데이터 관찰이라고 한다.
+      // - beforeUpdate는 관찰하고 있는 데이터가 변경되면 가상 돔으로 화면을 다시 그리기 전에 호출 되는 단계이다.
+      // - 변경 예정인 새 데이터에 접근할 수 있어 변경 예정 데이터의 값과 관련된 로직을 미리 넣을 수 있다.
+      // - 만약 여기에 값을 변경하는 로직을 넣더라도 화면에 다시 그려지지는 않는다.
+
+      // updated
+      // - 데이터가 변경되고 나서 가상 돔으로 다시 화면을 그리고 나면 실행되는 단계이다.
+      // - 데이터 변경으로 인한 화면 요소 변경까지 완료된 시점이므로, 데이터 변경 후 화면 요소 제어와 관련된 로직을 추가하기 좋은 단계이다.
+      // - 이 단계에서 데이터 값을 변경하면 무한 루프에 빠질 수 있기 때문에 값을 변경하려면 computed, watch와 같은 속성을 사용해야 한다.
+      // - 데이터 값을 갱신하는 로직은 가급적이면 beforeUpdate에 추가하고, updated에서는 변경 데이터의 화면 요소(돔)와 관련된 로직을 추가하는 것이 좋다.
+
+      // beforeDestroy
+      // - 뷰 인스턴스가 파괴되기 직전에 호출되는 단계이다.
+      // - 이 단계에서는 아직 인스턴스에 접근할 수 있다.
+      // - 따라서 뷰의 데이터를 삭제하기 좋은 단계이다.
+
+      // destroyed
+      // - 뷰 인스턴스가 파괴되고나서 호출되는 단계이다.
+      // - 뷰 인스턴스에 정의한 모든 속성이 제거되고 하위에 선언한 인스턴스들 또한 모두 파괴된다.
+      // -
+
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <div id="app">
+      <!-- child-component v-bind:props 속성이름="상위 컴포넌트의 data 속성" -->
+      <!-- HTML에서는 대소문자를 구별하지 않기 떄문에 hongGilDong 과 honggildong을 동일하게 처리하기 때문입니다. -->
+      <child-component v-bind:propsdata="message"></child-component>
+      <sibling-component v-bind:propsdata2="message2"></sibling-component>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+
+      Vue.component('child-component',{
+        props : ['propsdata'],
+        template : '<p>{{ propsdata }}</P>'
+      });
+
+     Vue.component('sibling-component', {
+       props : ['propsdata2'],
+       template : '<p>{{ propsdata2 }}</p>'
+     });
+
+      new Vue({
+        el : '#app',
+        data : {
+          message : '부모로부터 받은 메세지',
+          message2 : 'slibling이 부모에게 받은 메세지',
+        }
+      });
+    </script>
+  </body>
+</html>

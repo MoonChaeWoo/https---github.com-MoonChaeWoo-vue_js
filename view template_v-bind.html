@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div id="app">
+      <p v-bind:id="idA">아이디 바인딩</p>
+      <p v-bind:class="classA">클래스 바인딩</p>
+      <!-- v-bind를 약식으로 v-bind:style="styleA" -> :style="sytleA"로 작성하여 쓸 수 있다. -->
+      <p :style="styleA">스타일 바인딩</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+      // 사용자는 볼 수 없지만 라이브러리 내부적으로 template 속성에서 정의한 마크업 + 뷰 데이터를 가상 돔 기반의 render()함수로 변환한다.
+      // 변환된 render() 함수는 최종적으로 사용자가 볼 수 있게 화면을 그리는 역할을 한다.
+      // 변환 과정에서 뷰의 반응성이 화면에 더해진다.
+
+      // 템플릿에서 사용하는 뷰의 속성고 문법
+      // 1. 데이터 바인딩
+      // 2. 자바스크립트 표현식
+      // 3. 디렉티브
+      // 4. 이벤트 처리
+      // 5. 고급 템플릿 기법
+
+      // 데이터 바인딩
+      // - HTML 화면 요소를 뷰 인스턴스이 데이터와 연결하는 것을 의미한다.
+      // - 주요 문법은 {{}} 문법과 v-bind 속성이 있다.
+
+      // {{}} 콧수염 괄호
+      // - 뷰 인스턴스의 데이터를 HTML 태그에 연결하는 가장 기본적인 텍스트 삽입 방식이다.
+      // - {{}} 모양이 콧수염과 비슷하다고 하여 콧수염 괄호라고 부른다.
+      // - 뷰 뿐만 아니라 다른 언어나 프레임워크에서도 자주 사용되는 템플릿 문법이다.
+
+      // ex) <div id="app">                                <div id="app">                                    <div id="app" v-once>
+      //        {{ message }}                                                                                     {{message}}
+      //     </div>                                        </div>                                            </div>
+      //     <script>                                      <script>                                          * v-once: 만약 뷰 데이터가 변경되어도 값을 바꾸고 싶지 않다면
+      //        new Vue({                                    new Vue({                                                 v-once 속성을 사용한다.
+      //          el : '#app',                                  el : '#app',
+      //          data : {                                      data : {
+      //            message : 'Hello Vue.js!'                      message : 'Hello Vue.js!'
+      //          }                                             }
+      //        });                                             template : <h3>{{ message }}</h3>
+      //     <//script>                                      });
+      //                                                    <//script>
+
+      // v-bind
+      // - 아이디, 클래스, 스타일 등의 HTML 속성 값에 뷰 데이터 값을 연결할 때 사용하는 데이터 연결 방식이다.
+      // - 형식은 v-bind 속성으로 지정할 HTML 속성이나 props 속성 앞에 접두사로 붙여준다.
+
+      new Vue({
+        el : '#app',
+        data : {
+          idA : 10,
+          classA : 'container',
+          styleA : 'color : blue'
+        }
+      });
+    </script>
+  </body>
+</html>
